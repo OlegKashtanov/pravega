@@ -619,7 +619,7 @@ class BookKeeperLog implements DurableDataLog {
     private void completeWrite(Write write) {
         Timer t = write.complete();
         if (t != null) {
-	    log.info("{} for given iteration:  length - {}, time - {}", MetricsNames.BK_WRITE_BYTES, write.data.getLength(), t.getElapsed());
+	    log.info("{} for given iteration:  length - {}, time - {}", MetricsNames.BK_WRITE_BYTES, write.getLength(), t.getElapsed());
             this.metrics.bookKeeperWriteCompleted(write.getLength(), t.getElapsed());
         }
     }
