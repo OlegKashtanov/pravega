@@ -57,6 +57,7 @@ import org.apache.bookkeeper.client.LedgerHandle;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.data.Stat;
+import io.pravega.shared.MetricsNames;
 
 /**
  * Apache BookKeeper implementation of the DurableDataLog interface.
@@ -618,6 +619,7 @@ class BookKeeperLog implements DurableDataLog {
     private void completeWrite(Write write) {
         Timer t = write.complete();
         if (t != null) {
+            log.info("{} for given iteration:  length - {}, time - {}", MetricsNames.BK_WRITE_BYTES, write.getLength(), t.getElapsed());
             this.metrics.bookKeeperWriteCompleted(write.getLength(), t.getElapsed());
         }
     }
