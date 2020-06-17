@@ -51,6 +51,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import io.pravega.shared.MetricsNames;
 
 import static java.nio.file.attribute.PosixFilePermission.OWNER_WRITE;
 
@@ -333,6 +334,7 @@ public class FileSystemStorage implements SyncStorage {
             }
             channel.force(false);
         }
+        log.info("{} for given iteration:  bytes - {}, time - {}", MetricsNames.STORAGE_WRITE_BYTES, totalBytesWritten, timer.getElapsed());
         FileSystemMetrics.WRITE_LATENCY.reportSuccessEvent(timer.getElapsed());
         FileSystemMetrics.WRITE_BYTES.add(totalBytesWritten);
         LoggerHelpers.traceLeave(log, "write", traceId);
