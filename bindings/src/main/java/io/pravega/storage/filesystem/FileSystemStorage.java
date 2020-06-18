@@ -331,10 +331,12 @@ public class FileSystemStorage implements SyncStorage {
                 offset += bytesWritten;
                 totalBytesWritten += bytesWritten;
                 length -= bytesWritten;
+                log.info("Storage INCREMENT: segment: {},bytes: {}", handle.getSegmentName(), bytesWritten);
             }
             channel.force(false);
         }
-        log.info("{} for given iteration:  bytes - {}, time - {}", MetricsNames.STORAGE_WRITE_BYTES, totalBytesWritten, timer.getElapsed());
+        log.info("Storage FLUSH: segment: {},bytes: {},time: {}", handle.getSegmentName(),
+                totalBytesWritten, timer.getElapsed());
         FileSystemMetrics.WRITE_LATENCY.reportSuccessEvent(timer.getElapsed());
         FileSystemMetrics.WRITE_BYTES.add(totalBytesWritten);
         LoggerHelpers.traceLeave(log, "write", traceId);
